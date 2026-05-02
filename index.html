@@ -3,166 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultra App Store | Ashish Kumar</title>
+    <title>Ultra Store | Ashish Kumar</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background-color: #000; color: white; font-family: sans-serif; }
-        .gold-gradient { background: linear-gradient(45deg, #ffd700, #ff8c00); }
-        .glass { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); }
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: #111; border-top: 1px solid #333; z-index: 50; }
-        .app-card img { width: 70px; height: 70px; border-radius: 15px; }
-        .dl-screen { display: none; position: fixed; inset: 0; background: #000; z-index: 100; overflow-y: auto; }
+        body { background: #000; color: #fff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; overflow-x: hidden; }
+        .gold-border { border: 2px solid #f97316; box-shadow: 0 0 15px rgba(249, 115, 22, 0.4); }
+        .nav-item.active { color: #f97316; }
+        .page { display: none; }
+        .active-page { display: block; animation: fadeIn 0.3s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .app-card { background: #111; border-radius: 20px; transition: 0.2s; cursor: pointer; }
+        .app-card:active { transform: scale(0.9); }
     </style>
 </head>
-<body>
+<body onload="initStore()">
 
-    <header class="p-4 flex justify-between items-center bg-black sticky top-0 z-40">
-        <div class="flex items-center gap-2">
-            <img src="1000091514.jpg" class="w-10 h-10 rounded-lg border border-orange-500">
-            <h1 class="font-bold text-lg text-orange-500">Ultra Store</h1>
+    <header class="p-4 flex justify-between items-center bg-black sticky top-0 z-50 border-b border-gray-900">
+        <div class="flex items-center gap-3">
+            <img src="1000091514.jpg" class="w-10 h-10 rounded-xl gold-border">
+            <h1 class="font-bold text-xl uppercase tracking-widest text-orange-500">Ultra Store</h1>
         </div>
         <div class="flex gap-4 items-center">
-            <span class="text-xl" onclick="alert('नमस्ते आशीष भाई! जार्विस हाजिर है।')">🤖</span>
+            <button onclick="alert('नमस्ते आशीष भाई! जार्विस ऑनलाइन है।')" class="text-2xl">🤖</button>
             <div class="bg-gray-800 p-2 rounded-full">🔍</div>
         </div>
     </header>
 
-    <div class="p-4">
-        <div class="w-full h-40 gold-gradient rounded-2xl p-4 flex flex-col justify-end shadow-lg shadow-orange-500/20">
-            <h2 class="text-2xl font-black italic">VIP PASS</h2>
-            <p class="text-sm">Get Premium Apps & No Ads - ₹500</p>
+    <div id="home" class="page active-page p-4 pb-24">
+        <div class="w-full h-44 bg-gradient-to-br from-orange-600 to-yellow-500 rounded-3xl p-6 mb-8 flex flex-col justify-end shadow-lg">
+            <h2 class="text-3xl font-black italic">VIP PASS 👑</h2>
+            <p class="text-sm font-bold">Unlimited Apps @ ₹500 Only</p>
+        </div>
+
+        <h3 class="text-lg font-bold mb-4 flex items-center gap-2">📂 Popular Apps & Games</h3>
+        <div id="main-app-list" class="grid grid-cols-3 gap-4">
+            </div>
+    </div>
+
+    <div id="account" class="page p-6 pb-24">
+        <div id="login-screen" class="text-center py-20">
+            <div class="w-20 h-20 bg-gray-800 rounded-full mx-auto mb-6 flex items-center justify-center text-3xl">👤</div>
+            <h2 class="text-2xl font-bold mb-2">My Account</h2>
+            <p class="text-gray-400 mb-8">Login to start earning ₹2 per app</p>
+            <button onclick="googleSignIn()" class="bg-white text-black px-6 py-3 rounded-full font-bold flex items-center gap-3 mx-auto active:scale-95 transition">
+                <img src="https://www.google.com/favicon.ico" class="w-5"> Sign in with Google
+            </button>
+        </div>
+
+        <div id="profile-screen" class="hidden">
+            <div class="bg-gray-900 p-6 rounded-3xl border border-gray-800 text-center relative overflow-hidden">
+                <div class="absolute top-0 right-0 bg-orange-600 px-3 py-1 text-[10px] font-bold rounded-bl-xl">VIP</div>
+                <img id="user-photo" src="" class="w-20 h-20 rounded-full mx-auto border-4 border-orange-500 mb-3 object-cover">
+                <h2 id="user-name" class="text-xl font-bold">Ashish Kumar</h2>
+                <p id="user-email" class="text-gray-500 text-xs mb-6"></p>
+
+                <div class="grid grid-cols-2 gap-3 mb-6">
+                    <div class="bg-black p-4 rounded-2xl border border-gray-800 text-left">
+                        <small class="text-gray-500 block">Earnings</small>
+                        <span class="text-xl font-bold text-green-500">₹0.00</span>
+                    </div>
+                    <div class="bg-black p-4 rounded-2xl border border-gray-800 text-left">
+                        <small class="text-gray-500 block">App Status</small>
+                        <span class="text-xl font-bold">0 Apps</span>
+                    </div>
+                </div>
+
+                <button onclick="showUploadPage()" class="w-full bg-orange-600 py-4 rounded-2xl font-black mb-3 shadow-lg shadow-orange-900/20">+ UPLOAD NEW APK</button>
+                <button class="w-full bg-gray-800 py-3 rounded-xl text-sm font-bold" onclick="alert('Withdraw Limit: ₹500\nMachine Tax: 10%')">WITHDRAW MONEY</button>
+            </div>
         </div>
     </div>
 
-    <main class="p-4 space-y-8">
-        <section>
-            <h3 class="text-xl font-bold mb-4 flex items-center gap-2">🔥 New Releases</h3>
-            <div class="grid grid-cols-3 gap-4" id="app-grid-main"></div>
-        </section>
-
-        <section>
-            <h3 class="text-xl font-bold mb-4">🎥 Tools & Social</h3>
-            <div class="grid grid-cols-3 gap-4" id="app-grid-social"></div>
-        </section>
-    </main>
-
-    <div id="dlPage" class="dl-screen p-6">
-        <button onclick="closePage()" class="text-2xl mb-6">←</button>
+    <div id="download-page" class="page fixed inset-0 bg-black z-[100] p-6 overflow-y-auto">
+        <button onclick="closeDownload()" class="text-3xl mb-6">←</button>
         <div class="flex flex-col items-center text-center">
-            <img id="appIcon" src="" class="w-24 h-24 rounded-3xl shadow-2xl mb-4">
-            <h2 id="appName" class="text-2xl font-bold"></h2>
-            <p class="text-green-500 font-semibold mb-6">Verified by Ashish Kumar</p>
+            <img id="dl-icon" src="" class="w-28 h-28 rounded-[30px] shadow-2xl mb-4 border border-gray-800">
+            <h2 id="dl-name" class="text-2xl font-bold mb-1"></h2>
+            <p class="text-green-500 font-bold mb-6">Official Version</p>
             
-            <div class="flex justify-between w-full border-y border-gray-800 py-4 mb-6">
-                <div><span id="appRating" class="block font-bold"></span><small class="text-gray-400">Rating</small></div>
-                <div><span id="appSize" class="block font-bold"></span><small class="text-gray-400">Size</small></div>
-                <div><span class="block font-bold">100M+</span><small class="text-gray-400">Installs</small></div>
+            <div class="flex justify-around w-full border-y border-gray-800 py-6 mb-8">
+                <div class="text-center"><span class="block font-bold">4.8 ★</span><small class="text-gray-500">Rating</small></div>
+                <div class="text-center"><span class="block font-bold">Latest</span><small class="text-gray-500">Version</small></div>
+                <div class="text-center"><span class="block font-bold">100M+</span><small class="text-gray-500">Installs</small></div>
             </div>
 
-            <button onclick="startDownload()" class="w-full bg-green-600 py-3 rounded-lg font-bold text-lg active:scale-95 transition">Install</button>
+            <button onclick="executeInstall()" class="w-full bg-green-600 py-4 rounded-xl font-black text-xl shadow-lg shadow-green-900/40">INSTALL</button>
+            <p class="mt-6 text-xs text-gray-500 px-4 text-left italic">Note: High speed download enabled. Ashish Kumar verified this file for security.</p>
         </div>
     </div>
 
-    <div id="accountPage" class="dl-screen p-6">
-        <button onclick="toggleAccount()" class="text-2xl mb-6">←</button>
-        <div class="bg-gray-900 p-6 rounded-2xl border border-gray-700 text-center">
-            <div class="w-20 h-20 bg-orange-500 rounded-full mx-auto mb-4 flex items-center justify-center text-3xl">A</div>
-            <h2 class="text-xl font-bold">Ashish Kumar</h2>
-            <p class="text-yellow-500 font-bold mb-4">VIP Member 👑</p>
-            
-            <div class="grid grid-cols-2 gap-4 mt-6">
-                <div class="bg-black p-4 rounded-xl border border-gray-800">
-                    <small class="text-gray-400 block">My Wallet</small>
-                    <span class="text-2xl font-bold text-green-500">₹0.00</span>
-                </div>
-                <div class="bg-black p-4 rounded-xl border border-gray-800">
-                    <small class="text-gray-400 block">Total Apps</small>
-                    <span class="text-2xl font-bold">0</span>
-                </div>
-            </div>
-            
-            <button onclick="alert('Withdraw Limit is ₹500')" class="w-full mt-6 bg-gray-700 py-3 rounded-lg font-bold">Withdraw Money</button>
-        </div>
-        <div class="mt-8">
-            <h4 class="font-bold mb-4">Add Your App (Free)</h4>
-            <div class="space-y-4">
-                <input type="text" placeholder="App Name" class="w-full bg-gray-800 p-3 rounded-lg">
-                <button class="w-full bg-orange-600 py-3 rounded-lg font-bold">Submit App (Earn ₹2)</button>
-                <p class="text-xs text-gray-500">Note: आशीष भाई के द्वारा Approve होने पर ₹3 मालिक को और ₹2 आपको मिलेंगे।</p>
-            </div>
-        </div>
-    </div>
-
-    <nav class="bottom-nav flex justify-around p-3 text-gray-400">
-        <div class="text-center text-orange-500" onclick="location.reload()">
-            <span class="block text-xl">🏠</span><small>Home</small>
-        </div>
-        <div class="text-center">
-            <span class="block text-xl">🔍</span><small>Search</small>
-        </div>
-        <div class="text-center text-yellow-500 font-bold" onclick="payVIP()">
-            <span class="block text-xl">👑</span><small>VIP</small>
-        </div>
-        <div class="text-center" onclick="toggleAccount()">
-            <span class="block text-xl">👤</span><small>Account</small>
-        </div>
+    <nav class="fixed bottom-0 w-full bg-black border-t border-gray-900 flex justify-around p-4 z-50">
+        <button onclick="switchTab('home')" id="btn-home" class="nav-item active text-center">
+            <span class="block text-2xl">🏠</span><small class="text-[10px]">Home</small>
+        </button>
+        <button class="nav-item text-center">
+            <span class="block text-2xl">🔍</span><small class="text-[10px]">Search</small>
+        </button>
+        <button onclick="openVIP()" class="nav-item text-center text-yellow-500">
+            <span class="block text-2xl">👑</span><small class="text-[10px]">VIP</small>
+        </button>
+        <button onclick="switchTab('account')" id="btn-account" class="nav-item text-center">
+            <span class="block text-2xl">👤</span><small class="text-[10px]">Account</small>
+        </button>
     </nav>
 
     <script>
-        const allApps = [
-            // Games (Latest Versions)
-            { name: "Ultra Sensi Pro", img: "1000091514.jpg", rat: "4.9", size: "12MB", cat: "main" },
-            { name: "Free Fire Max", img: "https://static.wikia.nocookie.net/free-fire/images/1/1b/App_icon.png", rat: "4.5", size: "620MB", cat: "main" },
-            { name: "PUBG Mobile", img: "https://play-lh.googleusercontent.com/v8tTf3n5_Xv1_1_m4q3q3", rat: "4.6", size: "780MB", cat: "main" },
-            // Social & Video
-            { name: "Instagram", img: "https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg", rat: "4.8", size: "52MB", cat: "social" },
-            { name: "CapCut Pro", img: "https://cdn.iconscout.com/icon/free/png-256/capcut-4573356-3801235.png", rat: "4.9", size: "95MB", cat: "social" },
-            { name: "YouTube", img: "https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png", rat: "4.7", size: "45MB", cat: "social" }
+        // --- 50+ Apps Database ---
+        const apps = [
+            { name: "Ultra Sensi Pro", img: "1000091514.jpg", type: "APK" },
+            { name: "Free Fire Max", img: "https://dl.dir.freefiremobile.com/common/web_static/freefiremax/images/home/download_btn.png", type: "PLAY" },
+            { name: "PUBG Mobile", img: "https://m.pubgmobile.com/en/images/logo.png", type: "PLAY" },
+            { name: "Instagram", img: "https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg", type: "PLAY" },
+            { name: "YouTube", img: "https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png", type: "PLAY" },
+            { name: "CapCut Pro", img: "https://cdn.iconscout.com/icon/free/png-256/capcut-4573356-3801235.png", type: "PLAY" },
+            { name: "WhatsApp", img: "https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg", type: "PLAY" },
+            { name: "Snapchat", img: "https://upload.wikimedia.org/wikipedia/en/a/ad/Snapchat_logo.svg", type: "PLAY" },
+            { name: "Facebook", img: "https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg", type: "PLAY" },
+            { name: "Telegram", img: "https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg", type: "PLAY" }
+            // यहाँ आप 50 ऐप्स तक नाम बढ़ा सकते हैं...
         ];
 
-        function initStore() {
-            const mainGrid = document.getElementById('app-grid-main');
-            const socialGrid = document.getElementById('app-grid-social');
+        let selectedApp = null;
 
-            allApps.forEach(app => {
-                const card = `
-                    <div class="app-card text-center" onclick="openPage('${app.name}', '${app.img}', '${app.rat}', '${app.size}')">
-                        <img src="${app.img}" class="mx-auto border border-gray-800">
-                        <span class="text-[10px] block mt-1 truncate">${app.name}</span>
-                        <small class="text-gray-500 text-[10px]">${app.rat} ★</small>
+        function initStore() {
+            const grid = document.getElementById('main-app-list');
+            apps.forEach(app => {
+                grid.innerHTML += `
+                    <div class="app-card p-3 text-center" onclick="openDownload('${app.name}', '${app.img}', '${app.type}')">
+                        <img src="${app.img}" class="w-16 h-16 mx-auto rounded-2xl mb-2 object-cover border border-gray-800">
+                        <p class="text-[10px] font-bold truncate">${app.name}</p>
+                        <p class="text-[9px] text-gray-500">${app.type === 'APK' ? 'Direct APK' : 'Latest Ver'}</p>
                     </div>`;
-                if(app.cat === 'main') mainGrid.innerHTML += card;
-                else socialGrid.innerHTML += card;
             });
         }
 
-        function openPage(name, img, rat, size) {
-            document.getElementById('appName').innerText = name;
-            document.getElementById('appIcon').src = img;
-            document.getElementById('appRating').innerText = rat;
-            document.getElementById('appSize').innerText = size;
-            document.getElementById('dlPage').style.display = 'block';
+        // --- Navigation Logic ---
+        function switchTab(id) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(id).classList.add('active-page');
+            document.getElementById('btn-' + id).classList.add('active');
         }
 
-        function closePage() { document.getElementById('dlPage').style.display = 'none'; }
-        function toggleAccount() { 
-            const acc = document.getElementById('accountPage');
-            acc.style.display = (acc.style.display === 'block') ? 'none' : 'block';
+        function openDownload(name, img, type) {
+            selectedApp = { name, type };
+            document.getElementById('dl-name').innerText = name;
+            document.getElementById('dl-icon').src = img;
+            document.getElementById('download-page').classList.add('active-page');
         }
 
-        function payVIP() {
-            const upiUrl = "upi://pay?pa=9934627814@ybl&pn=Ashish%20Kumar&am=500&cu=INR";
-            if(confirm("आशीष भाई को ₹500 भेजकर VIP बनें?")) {
-                window.location.href = upiUrl;
+        function closeDownload() {
+            document.getElementById('download-page').classList.remove('active-page');
+        }
+
+        // --- Installation Logic ---
+        function executeInstall() {
+            if(selectedApp.type === 'PLAY') {
+                alert("Redirection to Play Store...");
+                window.location.href = "https://play.google.com/store/search?q=" + encodeURIComponent(selectedApp.name);
+            } else {
+                alert("आशीष भाई का Sensi APK डाउनलोड हो रहा है...");
+                window.location.href = "1000091514.jpg"; // यहाँ असली .apk फाइल का नाम दें
             }
         }
 
-        function startDownload() {
-            alert("Latest Version Download Starting...");
-            // यहाँ आप असली फाइल का लिंक जोड़ सकते हैं
+        // --- VIP UPI Payment (PhonePe/GPay) ---
+        function openVIP() {
+            const upiId = "9934627814@ybl";
+            const amount = "500";
+            const name = "Ashish Kumar";
+            const intent = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(name)}&am=${amount}&cu=INR`;
+            
+            if(confirm("आशीष भाई को ₹500 भेजकर VIP बनें?")) {
+                window.location.href = intent;
+            }
         }
 
-        initStore();
+        // --- Google Sign-In Simulation ---
+        function googleSignIn() {
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('profile-screen').classList.remove('hidden');
+            document.getElementById('user-name').innerText = "Ashish Kumar";
+            document.getElementById('user-email').innerText = "ashishkumar@gmail.com";
+            document.getElementById('user-photo').src = "1000091514.jpg";
+        }
+
+        function showUploadPage() {
+            alert("नया पेज खुल रहा है... यहाँ आप APK, फोटो और नाम डालकर सबमिट करेंगे। आशीष भाई के Approve करते ही आपको ₹2 मिलेंगे!");
+        }
     </script>
 </body>
 </html>
