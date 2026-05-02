@@ -3,125 +3,166 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultra App Store - Official</title>
+    <title>Ultra App Store | Ashish Kumar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        :root { --primary: #ff6600; --dark: #0a0a0a; --vip: #ffea00; }
-        body { margin: 0; font-family: 'Poppins', sans-serif; background: var(--dark); color: #fff; }
-        
-        /* Header */
-        .header { background: #111; padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--primary); position: sticky; top: 0; z-index: 1000; }
-        .logo-area { display: flex; align-items: center; gap: 10px; }
-        .logo-img { width: 40px; height: 40px; border-radius: 8px; border: 1px solid var(--primary); }
-        .search-bar { flex: 1; margin: 0 15px; background: #222; border: none; padding: 10px; border-radius: 20px; color: #fff; }
-        
-        /* VIP & Gemini Buttons */
-        .nav-icons { display: flex; align-items: center; gap: 15px; }
-        .vip-badge { background: var(--vip); color: #000; padding: 3px 8px; border-radius: 5px; font-weight: bold; font-size: 12px; box-shadow: 0 0 10px var(--vip); }
-        .gemini-btn { cursor: pointer; font-size: 20px; filter: drop-shadow(0 0 5px #00f2ff); }
-
-        /* App Grid */
-        .section-title { padding: 20px 15px 5px; font-size: 18px; color: var(--primary); }
-        .app-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 15px; padding: 15px; }
-        .app-card { background: #1a1a1a; padding: 12px; border-radius: 15px; text-align: center; cursor: pointer; transition: 0.3s; }
-        .app-card:hover { transform: translateY(-5px); background: #252525; }
-        .app-card img { width: 70px; height: 70px; border-radius: 18px; margin-bottom: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
-        .app-name { font-size: 13px; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-        /* Download Page Overlay */
-        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--dark); z-index: 2000; overflow-y: auto; padding-top: 20px; }
-        .dl-header { text-align: center; padding: 20px; }
-        .dl-btn { background: #01875f; color: #fff; padding: 12px 60px; border-radius: 30px; text-decoration: none; font-weight: bold; display: inline-block; margin-top: 20px; }
-        
-        /* Payment Modal */
-        .modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #222; padding: 25px; border-radius: 20px; border: 2px solid var(--vip); z-index: 3000; width: 85%; max-width: 400px; text-align: center; }
+        body { background-color: #000; color: white; font-family: sans-serif; }
+        .gold-gradient { background: linear-gradient(45deg, #ffd700, #ff8c00); }
+        .glass { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); }
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: #111; border-top: 1px solid #333; z-index: 50; }
+        .app-card img { width: 70px; height: 70px; border-radius: 15px; }
+        .dl-screen { display: none; position: fixed; inset: 0; background: #000; z-index: 100; overflow-y: auto; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <div class="logo-area">
-            <img src="IMG_20260501_103729.jpg" class="logo-img"> <div style="font-weight: bold; font-size: 14px;">Ultra App</div>
+    <header class="p-4 flex justify-between items-center bg-black sticky top-0 z-40">
+        <div class="flex items-center gap-2">
+            <img src="1000091514.jpg" class="w-10 h-10 rounded-lg border border-orange-500">
+            <h1 class="font-bold text-lg text-orange-500">Ultra Store</h1>
         </div>
-        <input type="text" class="search-bar" placeholder="Search apps & games...">
-        <div class="nav-icons">
-            <span class="gemini-btn" onclick="askJarvis()">🤖</span>
-            <div class="vip-badge" onclick="showVip()">VIP</div>
-            <div style="font-size: 22px;">☰</div>
+        <div class="flex gap-4 items-center">
+            <span class="text-xl" onclick="alert('नमस्ते आशीष भाई! जार्विस हाजिर है।')">🤖</span>
+            <div class="bg-gray-800 p-2 rounded-full">🔍</div>
+        </div>
+    </header>
+
+    <div class="p-4">
+        <div class="w-full h-40 gold-gradient rounded-2xl p-4 flex flex-col justify-end shadow-lg shadow-orange-500/20">
+            <h2 class="text-2xl font-black italic">VIP PASS</h2>
+            <p class="text-sm">Get Premium Apps & No Ads - ₹500</p>
         </div>
     </div>
 
-    <div class="section-title">FEATURED BY SUSHIL</div>
-    <div class="app-grid">
-        <div class="app-card" onclick="openPage('Ultra Sensi Pro', 'IMG_20260501_103729.jpg', '4.9', '12MB')">
-            <img src="IMG_20260501_103729.jpg">
-            <div class="app-name">Ultra Sensi</div>
-        </div>
-    </div>
+    <main class="p-4 space-y-8">
+        <section>
+            <h3 class="text-xl font-bold mb-4 flex items-center gap-2">🔥 New Releases</h3>
+            <div class="grid grid-cols-3 gap-4" id="app-grid-main"></div>
+        </section>
 
-    <div class="section-title">POPULAR APPS</div>
-    <div class="app-grid" id="appsContainer">
-        </div>
+        <section>
+            <h3 class="text-xl font-bold mb-4">🎥 Tools & Social</h3>
+            <div class="grid grid-cols-3 gap-4" id="app-grid-social"></div>
+        </section>
+    </main>
 
-    <div id="dlPage" class="overlay">
-        <div style="padding: 20px;" onclick="closePage()">⬅ Back</div>
-        <div class="dl-header">
-            <img id="dlIcon" src="" style="width: 120px; border-radius: 25px;">
-            <h2 id="dlName">App Name</h2>
-            <p style="color: #01875f; font-weight: bold;">Verified by Ultra App Store</p>
-            <div style="display: flex; justify-content: space-around; margin: 20px 0; border-top: 1px solid #333; padding-top: 10px;">
-                <div><b id="dlRating">4.5</b>★</div>
-                <div><b id="dlSize">25MB</b></div>
-                <div><b>1M+</b> Downloads</div>
+    <div id="dlPage" class="dl-screen p-6">
+        <button onclick="closePage()" class="text-2xl mb-6">←</button>
+        <div class="flex flex-col items-center text-center">
+            <img id="appIcon" src="" class="w-24 h-24 rounded-3xl shadow-2xl mb-4">
+            <h2 id="appName" class="text-2xl font-bold"></h2>
+            <p class="text-green-500 font-semibold mb-6">Verified by Ashish Kumar</p>
+            
+            <div class="flex justify-between w-full border-y border-gray-800 py-4 mb-6">
+                <div><span id="appRating" class="block font-bold"></span><small class="text-gray-400">Rating</small></div>
+                <div><span id="appSize" class="block font-bold"></span><small class="text-gray-400">Size</small></div>
+                <div><span class="block font-bold">100M+</span><small class="text-gray-400">Installs</small></div>
             </div>
-            <a href="#" class="dl-btn" onclick="alert('Downloading Started...')">Install</a>
+
+            <button onclick="startDownload()" class="w-full bg-green-600 py-3 rounded-lg font-bold text-lg active:scale-95 transition">Install</button>
         </div>
     </div>
 
-    <div id="vipModal" class="modal">
-        <h2 style="color: var(--vip);">Become a VIP Member</h2>
-        <p>VIP बनने के लिए ₹500 भेजें और प्रीमियम ऐप्स पाएँ।</p>
-        <div style="background: #111; padding: 15px; border-radius: 10px; margin-bottom: 15px; text-align: left;">
-            <b>Bank:</b> Bank of India<br>
-            <b>Mobile:</b> 9934627814<br>
-            <b>Name:</b> Ashish Kumar
+    <div id="accountPage" class="dl-screen p-6">
+        <button onclick="toggleAccount()" class="text-2xl mb-6">←</button>
+        <div class="bg-gray-900 p-6 rounded-2xl border border-gray-700 text-center">
+            <div class="w-20 h-20 bg-orange-500 rounded-full mx-auto mb-4 flex items-center justify-center text-3xl">A</div>
+            <h2 class="text-xl font-bold">Ashish Kumar</h2>
+            <p class="text-yellow-500 font-bold mb-4">VIP Member 👑</p>
+            
+            <div class="grid grid-cols-2 gap-4 mt-6">
+                <div class="bg-black p-4 rounded-xl border border-gray-800">
+                    <small class="text-gray-400 block">My Wallet</small>
+                    <span class="text-2xl font-bold text-green-500">₹0.00</span>
+                </div>
+                <div class="bg-black p-4 rounded-xl border border-gray-800">
+                    <small class="text-gray-400 block">Total Apps</small>
+                    <span class="text-2xl font-bold">0</span>
+                </div>
+            </div>
+            
+            <button onclick="alert('Withdraw Limit is ₹500')" class="w-full mt-6 bg-gray-700 py-3 rounded-lg font-bold">Withdraw Money</button>
         </div>
-        <button onclick="this.parentElement.style.display='none'" style="background: var(--primary); border:none; padding: 10px 20px; border-radius: 5px; color: #fff;">Close</button>
+        <div class="mt-8">
+            <h4 class="font-bold mb-4">Add Your App (Free)</h4>
+            <div class="space-y-4">
+                <input type="text" placeholder="App Name" class="w-full bg-gray-800 p-3 rounded-lg">
+                <button class="w-full bg-orange-600 py-3 rounded-lg font-bold">Submit App (Earn ₹2)</button>
+                <p class="text-xs text-gray-500">Note: आशीष भाई के द्वारा Approve होने पर ₹3 मालिक को और ₹2 आपको मिलेंगे।</p>
+            </div>
+        </div>
     </div>
+
+    <nav class="bottom-nav flex justify-around p-3 text-gray-400">
+        <div class="text-center text-orange-500" onclick="location.reload()">
+            <span class="block text-xl">🏠</span><small>Home</small>
+        </div>
+        <div class="text-center">
+            <span class="block text-xl">🔍</span><small>Search</small>
+        </div>
+        <div class="text-center text-yellow-500 font-bold" onclick="payVIP()">
+            <span class="block text-xl">👑</span><small>VIP</small>
+        </div>
+        <div class="text-center" onclick="toggleAccount()">
+            <span class="block text-xl">👤</span><small>Account</small>
+        </div>
+    </nav>
 
     <script>
-        const apps = [
-            { name: "CapCut", img: "https://cdn.iconscout.com/icon/free/png-256/capcut-4573356-3801235.png", rating: "4.8", size: "90MB" },
-            { name: "Free Fire", img: "https://static.wikia.nocookie.net/free-fire/images/1/1b/App_icon.png", rating: "4.5", size: "600MB" },
-            { name: "PUBG", img: "https://w7.pngwing.com/pngs/391/337/png-transparent-pubg-mobile-logo-thumbnail.png", rating: "4.6", size: "750MB" },
-            { name: "Cricket 24", img: "https://cdn-icons-png.flaticon.com/512/1151/1151125.png", rating: "4.2", size: "55MB" },
-            { name: "Snake", img: "https://cdn-icons-png.flaticon.com/512/528/528107.png", rating: "4.7", size: "5MB" }
+        const allApps = [
+            // Games (Latest Versions)
+            { name: "Ultra Sensi Pro", img: "1000091514.jpg", rat: "4.9", size: "12MB", cat: "main" },
+            { name: "Free Fire Max", img: "https://static.wikia.nocookie.net/free-fire/images/1/1b/App_icon.png", rat: "4.5", size: "620MB", cat: "main" },
+            { name: "PUBG Mobile", img: "https://play-lh.googleusercontent.com/v8tTf3n5_Xv1_1_m4q3q3", rat: "4.6", size: "780MB", cat: "main" },
+            // Social & Video
+            { name: "Instagram", img: "https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg", rat: "4.8", size: "52MB", cat: "social" },
+            { name: "CapCut Pro", img: "https://cdn.iconscout.com/icon/free/png-256/capcut-4573356-3801235.png", rat: "4.9", size: "95MB", cat: "social" },
+            { name: "YouTube", img: "https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png", rat: "4.7", size: "45MB", cat: "social" }
         ];
 
-        // Load Apps
-        const container = document.getElementById('appsContainer');
-        apps.forEach(app => {
-            container.innerHTML += `
-                <div class="app-card" onclick="openPage('${app.name}', '${app.img}', '${app.rating}', '${app.size}')">
-                    <img src="${app.img}">
-                    <div class="app-name">${app.name}</div>
-                </div>`;
-        });
+        function initStore() {
+            const mainGrid = document.getElementById('app-grid-main');
+            const socialGrid = document.getElementById('app-grid-social');
 
-        function openPage(name, img, rating, size) {
-            document.getElementById('dlName').innerText = name;
-            document.getElementById('dlIcon').src = img;
-            document.getElementById('dlRating').innerText = rating;
-            document.getElementById('dlSize').innerText = size;
+            allApps.forEach(app => {
+                const card = `
+                    <div class="app-card text-center" onclick="openPage('${app.name}', '${app.img}', '${app.rat}', '${app.size}')">
+                        <img src="${app.img}" class="mx-auto border border-gray-800">
+                        <span class="text-[10px] block mt-1 truncate">${app.name}</span>
+                        <small class="text-gray-500 text-[10px]">${app.rat} ★</small>
+                    </div>`;
+                if(app.cat === 'main') mainGrid.innerHTML += card;
+                else socialGrid.innerHTML += card;
+            });
+        }
+
+        function openPage(name, img, rat, size) {
+            document.getElementById('appName').innerText = name;
+            document.getElementById('appIcon').src = img;
+            document.getElementById('appRating').innerText = rat;
+            document.getElementById('appSize').innerText = size;
             document.getElementById('dlPage').style.display = 'block';
         }
 
         function closePage() { document.getElementById('dlPage').style.display = 'none'; }
-        function showVip() { document.getElementById('vipModal').style.display = 'block'; }
-        
-        function askJarvis() {
-            alert("नमस्ते सुशील! मैं जार्विस हूँ। ultraappstore.com पर आपका स्वागत है। आप यहाँ से VIP ऐप्स डाउनलोड कर सकते हैं।");
+        function toggleAccount() { 
+            const acc = document.getElementById('accountPage');
+            acc.style.display = (acc.style.display === 'block') ? 'none' : 'block';
         }
+
+        function payVIP() {
+            const upiUrl = "upi://pay?pa=9934627814@ybl&pn=Ashish%20Kumar&am=500&cu=INR";
+            if(confirm("आशीष भाई को ₹500 भेजकर VIP बनें?")) {
+                window.location.href = upiUrl;
+            }
+        }
+
+        function startDownload() {
+            alert("Latest Version Download Starting...");
+            // यहाँ आप असली फाइल का लिंक जोड़ सकते हैं
+        }
+
+        initStore();
     </script>
 </body>
-              </html>
-              
+</html>
