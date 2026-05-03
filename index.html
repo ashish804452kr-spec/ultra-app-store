@@ -1,115 +1,211 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Azad Store</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      font-family: Arial;
-      margin: 0;
-      background: #f5f5f5;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ultra App Store</title>
 
-    header {
-      background: #2ecc71;
-      color: white;
-      padding: 15px;
-      text-align: center;
-      font-size: 20px;
-    }
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  background: #000;
+  color: #fff;
+}
 
-    #search {
-      width: 90%;
-      margin: 10px;
-      padding: 10px;
-      font-size: 16px;
-    }
+/* HEADER */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  background: black;
+  border-bottom: 2px solid orange;
+}
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      padding: 10px;
-    }
+header img {
+  height: 40px;
+}
 
-    .card {
-      background: white;
-      padding: 10px;
-      border-radius: 10px;
-      text-align: center;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    }
+header h2 {
+  color: orange;
+}
 
-    img {
-      width: 80px;
-      height: 80px;
-    }
+/* JARVIS */
+#jarvis {
+  text-align: center;
+  padding: 15px;
+}
 
-    button {
-      background: #2ecc71;
-      color: white;
-      border: none;
-      padding: 8px;
-      margin-top: 5px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-  </style>
+.orb {
+  width: 80px;
+  height: 80px;
+  background: radial-gradient(circle, #00f, #000);
+  border-radius: 50%;
+  margin: auto;
+  box-shadow: 0 0 20px #00f;
+}
+
+#jarvis p {
+  color: cyan;
+}
+
+/* SEARCH */
+#search {
+  width: 90%;
+  padding: 10px;
+  margin: 10px;
+  font-size: 16px;
+}
+
+/* GRID */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 10px;
+  padding: 10px;
+}
+
+.card {
+  background: #111;
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+  border: 1px solid orange;
+}
+
+.card img {
+  width: 60px;
+}
+
+button {
+  background: orange;
+  border: none;
+  padding: 8px;
+  color: black;
+  margin-top: 5px;
+  cursor: pointer;
+}
+
+/* PAGE */
+.page {
+  display: none;
+  padding: 10px;
+}
+
+/* VIP */
+.vip {
+  background: gold;
+  color: black;
+  padding: 10px;
+  text-align: center;
+}
+</style>
 </head>
 
 <body>
 
-<header>Azad Store</header>
+<header>
+  <img src="https://raw.githubusercontent.com/github/explore/main/topics/security/security.png">
+  <h2>Ultra App Store</h2>
+</header>
 
-<input type="text" id="search" placeholder="Search Apps..." onkeyup="searchApp()">
+<!-- JARVIS -->
+<div id="jarvis">
+  <div class="orb"></div>
+  <p>नमस्ते, मैं जार्विस हूँ! सुशील कुमार के स्टोर पर आपका स्वागत है।</p>
+</div>
 
-<div class="grid" id="appList"></div>
+<input id="search" placeholder="Search apps..." onkeyup="searchApp()">
+
+<div class="grid" id="apps"></div>
+
+<!-- APP PAGE -->
+<div id="appPage" class="page"></div>
+
+<!-- APK TOOL -->
+<div class="page" id="apkTool">
+  <h2>Website to APK</h2>
+  <input placeholder="Website URL" id="url"><br><br>
+  <input placeholder="App Name" id="appname"><br><br>
+  <button onclick="convertAPK()">Convert</button>
+  <p id="apkResult"></p>
+</div>
+
+<!-- BUILDER -->
+<div class="page" id="builder">
+  <h2>Website Builder</h2>
+  <input placeholder="Website Name"><br><br>
+  <input type="file"><br><br>
+  <button onclick="alert('Jarvis helping you build site...')">Build</button>
+</div>
+
+<!-- VIP -->
+<div class="vip">
+  VIP Section ₹500 (Premium Apps)
+</div>
 
 <script>
 let apps = [
-  {
-    name: "WhatsApp",
-    image: "https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg",
-    rating: "4.5",
-    size: "50MB",
-    downloads: "5B+",
-    link: "https://play.google.com/store/apps/details?id=com.whatsapp"
-  },
-  {
-    name: "YouTube",
-    image: "https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg",
-    rating: "4.4",
-    size: "80MB",
-    downloads: "10B+",
-    link: "https://play.google.com/store/apps/details?id=com.google.android.youtube"
-  }
+  {name:"Instagram", img:"https://cdn-icons-png.flaticon.com/512/2111/2111463.png"},
+  {name:"WhatsApp", img:"https://cdn-icons-png.flaticon.com/512/733/733585.png"},
+  {name:"Free Fire", img:"https://cdn-icons-png.flaticon.com/512/888/888879.png"},
+  {name:"YouTube", img:"https://cdn-icons-png.flaticon.com/512/1384/1384060.png"}
 ];
 
-function loadApps(data){
-  let html = "";
-  data.forEach(app => {
-    html += `
-    <div class="card">
-      <img src="${app.image}">
-      <h4>${app.name}</h4>
-      <p>⭐ ${app.rating}</p>
-      <p>${app.size}</p>
-      <p>${app.downloads}</p>
-      <button onclick="downloadApp('${app.link}')">Install</button>
-    </div>
-    `;
+// duplicate to 50
+while(apps.length < 50){
+  apps.push(apps[Math.floor(Math.random()*4)]);
+}
+
+function loadApps(list){
+  let html="";
+  list.forEach(a=>{
+    html+=`
+    <div class="card" onclick="openApp('${a.name}','${a.img}')">
+      <img src="${a.img}">
+      <h4>${a.name}</h4>
+    </div>`;
   });
-  document.getElementById("appList").innerHTML = html;
+  document.getElementById("apps").innerHTML=html;
 }
 
 function searchApp(){
-  let value = document.getElementById("search").value.toLowerCase();
-  let filtered = apps.filter(app => app.name.toLowerCase().includes(value));
+  let val=document.getElementById("search").value.toLowerCase();
+  let filtered=apps.filter(a=>a.name.toLowerCase().includes(val));
   loadApps(filtered);
 }
 
-function downloadApp(link){
-  window.open(link, "_blank");
+function openApp(name,img){
+  document.getElementById("apps").style.display="none";
+
+  document.getElementById("appPage").style.display="block";
+  document.getElementById("appPage").innerHTML=`
+    <h2>${name}</h2>
+    <img src="${img}" width="100">
+    <p>⭐ 4.8 | 50MB | 1B+ Downloads</p>
+
+    <button onclick="install()">Install APK</button>
+    <button onclick="window.open('https://t.me/ULTRA111XFF0')">Telegram</button>
+
+    <h3>Screenshots</h3>
+    <img src="${img}" width="100">
+
+    <h3>Related Apps</h3>
+    <div class="grid">
+      ${apps.slice(0,6).map(a=>`<div class="card">${a.name}</div>`).join("")}
+    </div>
+  `;
+}
+
+function install(){
+  alert("APK Download Started (Demo)");
+}
+
+function convertAPK(){
+  let name=document.getElementById("appname").value;
+  document.getElementById("apkResult").innerHTML =
+    "APK Ready: Download " + name + ".apk (Demo)";
 }
 
 loadApps(apps);
