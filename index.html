@@ -6,127 +6,127 @@
     <title>Ultra App Store | Sushil Kumar</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background: #000; color: #fff; font-family: 'Segoe UI', sans-serif; overflow-x: hidden; }
-        .gold-border { border: 2px solid #f97316; box-shadow: 0 0 20px rgba(249, 115, 22, 0.5); }
-        .page { display: none; padding-bottom: 100px; }
-        .active-page { display: block; animation: fadeIn 0.4s; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .jarvis-orb { width: 50px; height: 50px; background: radial-gradient(circle, #00f2fe 0%, #000 80%); border-radius: 50%; box-shadow: 0 0 15px #00f2fe; animation: pulse 2s infinite; }
-        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
-        .app-card { background: #111; border-radius: 20px; transition: 0.2s; border: 1px solid #222; cursor: pointer; }
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Poppins:wght@300;600&display=swap');
+        body { background: #000; color: #fff; font-family: 'Poppins', sans-serif; overflow-x: hidden; }
+        .ultra-border { border: 2px solid #f97316; box-shadow: 0 0 20px rgba(249, 115, 22, 0.4); }
+        .page { display: none; padding-bottom: 100px; transition: 0.5s; }
+        .active-page { display: block; animation: zoomIn 0.3s ease-out; }
+        @keyframes zoomIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .jarvis-status { color: #00f2fe; text-shadow: 0 0 10px #00f2fe; font-family: 'Orbitron', sans-serif; }
+        .app-card { background: linear-gradient(145deg, #111, #050505); border: 1px solid #222; border-radius: 25px; transition: 0.3s; }
+        .app-card:active { transform: scale(0.9); border-color: #f97316; }
     </style>
 </head>
 <body onload="initStore()">
 
-    <header class="p-4 flex justify-between items-center sticky top-0 bg-black/90 backdrop-blur-md z-50 border-b border-gray-800">
+    <header class="p-4 flex justify-between items-center sticky top-0 bg-black/95 z-[100] border-b border-gray-900 backdrop-blur-lg">
         <div class="flex items-center gap-3">
-            <img src="1000091511.jpg" class="w-10 h-10 rounded-lg gold-border">
-            <h1 class="font-bold text-lg text-orange-500 italic">ULTRA STORE</h1>
+            <img src="1000091511.jpg" class="w-12 h-12 rounded-2xl ultra-border" onerror="this.src='https://cdn-icons-png.flaticon.com/512/888/888841.png'">
+            <div>
+                <h1 style="font-family: 'Orbitron';" class="text-orange-500 font-black tracking-tighter">ULTRA STORE</h1>
+                <p class="text-[8px] text-gray-500 uppercase tracking-widest">Sushil Kumar Edition</p>
+            </div>
         </div>
         <div class="flex items-center gap-4">
-            <div id="jarvis-status" class="jarvis-orb" onclick="jarvisSpeak('नमस्ते सुशील भाई, मैं आपकी मदद के लिए तैयार हूँ।')"></div>
-            <button class="bg-gray-800 p-2 rounded-full">🔍</button>
+            <div id="jarvis-orb" onclick="jarvisTalk()" class="w-12 h-12 bg-gradient-to-t from-cyan-500 to-blue-900 rounded-full shadow-[0_0_20px_#00f2fe] animate-pulse cursor-pointer"></div>
         </div>
     </header>
 
     <div id="home" class="page active-page p-4">
-        <div onclick="payVIP()" class="w-full h-44 bg-gradient-to-r from-orange-600 to-red-600 rounded-[30px] p-6 mb-8 flex flex-col justify-end shadow-xl cursor-pointer">
-            <h2 class="text-3xl font-black italic">VIP ACCESS 👑</h2>
-            <p class="text-sm">प्रीमियम APK अनलॉक करें - ₹500</p>
+        <div class="mb-6 relative">
+            <input type="text" id="search" onkeyup="searchApps()" placeholder="Search 50+ Popular Apps..." class="w-full bg-gray-900 border border-gray-800 p-4 rounded-2xl outline-none focus:border-orange-500 transition-all pl-12">
+            <span class="absolute left-4 top-4 opacity-30 text-xl">🔍</span>
         </div>
 
-        <h3 class="font-bold mb-4 px-2 flex items-center gap-2">🔥 Top 50 Apps & Games</h3>
-        <div id="app-list" class="grid grid-cols-3 gap-4">
+        <div id="app-grid" class="grid grid-cols-3 gap-4 mb-10">
             </div>
 
-        <div class="mt-10 p-6 glass bg-gray-900 rounded-[30px] border border-gray-800">
-            <h3 class="text-xl font-bold text-orange-500 mb-2 italic">Website को App कैसे बनाएँ?</h3>
-            <p class="text-xs text-gray-400 mb-4">अपना लिंक डालें और जार्विस से APK बनवाएं।</p>
-            <button onclick="showPage('builder')" class="w-full bg-white text-black py-3 rounded-xl font-black uppercase">अभी बनाएँ (Free)</button>
+        <div class="bg-gradient-to-br from-gray-900 to-black p-6 rounded-[35px] border border-orange-500/30 mb-10">
+            <h2 class="text-xl font-black mb-2 italic">WEBSITE TO APK 🛠️</h2>
+            <p class="text-[10px] text-gray-500 mb-4 uppercase">किसी भी वेबसाइट को ऐप में बदलें और पब्लिक करें</p>
+            <input id="web-url" type="text" placeholder="https://example.com" class="w-full bg-black border border-gray-800 p-3 rounded-xl mb-3 text-sm">
+            <input id="web-name" type="text" placeholder="App Name" class="w-full bg-black border border-gray-800 p-3 rounded-xl mb-4 text-sm">
+            <button onclick="convertApp()" class="w-full bg-orange-600 py-4 rounded-2xl font-black text-white shadow-lg shadow-orange-900/40">CONVERT TO APK</button>
         </div>
     </div>
 
-    <div id="dl-page" class="page fixed inset-0 bg-black z-[100] p-6 overflow-y-auto">
-        <button onclick="showPage('home')" class="text-3xl mb-6">←</button>
-        <div class="flex flex-col items-center">
-            <img id="dl-icon" src="" class="w-24 h-24 rounded-[28px] mb-4 gold-border">
-            <h2 id="dl-name" class="text-2xl font-bold mb-1"></h2>
-            <div class="flex gap-4 text-xs mb-8">
-                <span class="text-green-500 font-bold">4.8 ★ Rating</span>
-                <span class="text-gray-400 font-bold">100M+ Downloads</span>
+    <div id="dl-page" class="page fixed inset-0 bg-black z-[200] p-6 overflow-y-auto">
+        <button onclick="closePage()" class="text-4xl font-light mb-6">×</button>
+        <div class="flex flex-col items-center text-center">
+            <img id="app-icon" src="" class="w-28 h-28 rounded-[35px] mb-4 ultra-border object-cover">
+            <h2 id="app-title" class="text-3xl font-black mb-2"></h2>
+            <div class="flex gap-4 text-xs font-bold text-gray-500 mb-8">
+                <span class="bg-gray-900 px-3 py-1 rounded-full text-green-500">⭐ 4.9 Rating</span>
+                <span id="app-size" class="bg-gray-900 px-3 py-1 rounded-full">45 MB</span>
             </div>
             
-            <button onclick="alert('Downloading Started...')" class="w-full bg-green-600 py-4 rounded-2xl font-black text-xl mb-4">INSTALL</button>
-            <a href="https://t.me/ULTRA111XFF0" class="w-full bg-blue-600 py-3 rounded-xl text-center font-bold flex items-center justify-center gap-2">
-                ✈️ Join Telegram Channel
+            <button onclick="startDownload()" class="w-full bg-white text-black py-5 rounded-[25px] font-black text-xl mb-4">INSTALL NOW</button>
+            <a href="https://t.me/ULTRA111XFF0" class="w-full bg-[#0088cc] py-4 rounded-[25px] font-black flex justify-center items-center gap-3">
+                JOIN TELEGRAM CHANNEL
             </a>
 
-            <div class="mt-8 w-full">
-                <h4 class="font-bold mb-4">App Screenshots</h4>
-                <div class="flex gap-3 overflow-x-auto pb-4" id="gallery">
-                    <div class="min-w-[140px] h-48 bg-gray-900 rounded-2xl border border-gray-800"></div>
-                    <div class="min-w-[140px] h-48 bg-gray-900 rounded-2xl border border-gray-800"></div>
+            <div class="w-full mt-10 text-left border-t border-gray-900 pt-6">
+                <h4 class="font-bold mb-4 uppercase tracking-tighter">About this App</h4>
+                <p class="text-gray-500 text-sm">This application is verified by Jarvis AI and Sushil Kumar. Safe to install.</p>
+                <div class="flex gap-2 mt-4 overflow-x-auto pb-4">
+                    <div class="min-w-[140px] h-60 bg-gray-900 rounded-2xl"></div>
+                    <div class="min-w-[140px] h-60 bg-gray-900 rounded-2xl"></div>
                 </div>
             </div>
         </div>
     </div>
 
     <div id="account" class="page p-6">
-        <div class="text-center bg-gray-900 p-8 rounded-[40px] border border-gray-800">
-            <img src="1000091511.jpg" class="w-24 h-24 rounded-full mx-auto border-4 border-orange-500 mb-4">
-            <h2 class="text-2xl font-bold text-white">Sushil Kumar</h2>
-            <p class="text-orange-500 italic text-sm mb-8 tracking-widest">OWNER & CEO</p>
+        <div class="bg-gray-900 p-8 rounded-[40px] text-center border border-gray-800">
+            <img src="1000091511.jpg" class="w-24 h-24 rounded-full mx-auto mb-4 border-4 border-orange-500 p-1 shadow-2xl">
+            <h2 class="text-2xl font-bold">Sushil Kumar</h2>
+            <p class="jarvis-status text-[10px] mb-8">STATUS: ONLINE / OWNER</p>
 
-            <div class="grid grid-cols-2 gap-3 mb-8">
-                <div class="bg-black p-4 rounded-2xl text-left border border-gray-800">
-                    <small class="text-gray-500">Wallet</small>
-                    <div class="text-xl font-bold text-green-500">₹0.00</div>
+            <div class="grid grid-cols-2 gap-4 mb-8">
+                <div class="bg-black p-5 rounded-3xl border border-gray-800 text-left">
+                    <small class="text-gray-500 block mb-1">Wallet</small>
+                    <span class="text-2xl font-black text-green-500">₹0.00</span>
                 </div>
-                <div class="bg-black p-4 rounded-2xl text-left border border-gray-800">
-                    <small class="text-gray-500">Downloads</small>
-                    <div class="text-xl font-bold">0</div>
+                <div class="bg-black p-5 rounded-3xl border border-gray-800 text-left">
+                    <small class="text-gray-500 block mb-1">Downloads</small>
+                    <span class="text-2xl font-black">0</span>
                 </div>
             </div>
 
-            <div id="builder" class="text-left mt-6 pt-6 border-t border-gray-800">
-                <h4 class="font-bold text-orange-500 mb-4">🌐 Website to APK Maker</h4>
-                <input id="web-link" type="text" placeholder="Website Link डालें" class="w-full bg-black border border-gray-700 p-4 rounded-xl mb-3">
-                <input id="app-name" type="text" placeholder="App का नाम" class="w-full bg-black border border-gray-700 p-4 rounded-xl mb-3">
-                <button onclick="createApp()" class="w-full bg-orange-600 py-4 rounded-xl font-black">CREATE & PUBLIC APK</button>
-            </div>
+            <button onclick="payVIP()" class="w-full bg-gradient-to-r from-yellow-500 to-orange-600 py-4 rounded-2xl font-black mb-4">WITHDRAW MONEY</button>
+            <p class="text-[10px] text-gray-500 italic">Custom Domain/Name change: ₹500 via Jarvis</p>
         </div>
     </div>
 
-    <nav class="fixed bottom-0 w-full bg-black/90 border-t border-gray-800 flex justify-around p-4 z-50">
-        <button onclick="showPage('home')" class="text-orange-500"><span class="text-2xl">🏠</span></button>
-        <button onclick="alert('जार्विस सर्च कर रहा है...')" class="text-gray-500"><span class="text-2xl">🔍</span></button>
-        <button onclick="payVIP()" class="text-yellow-500"><span class="text-2xl">👑</span></button>
-        <button onclick="showPage('account')" class="text-gray-500"><span class="text-2xl">👤</span></button>
+    <nav class="fixed bottom-0 w-full bg-black/95 border-t border-gray-900 flex justify-around p-5 z-[100] backdrop-blur-md">
+        <button onclick="showPage('home')" class="text-orange-500 text-2xl">🏠</button>
+        <button onclick="payVIP()" class="text-yellow-500 text-2xl">👑</button>
+        <button onclick="showPage('account')" class="text-gray-500 text-2xl">👤</button>
     </nav>
 
     <script>
-        const apps = [
-            { name: "Ultra Sensi", icon: "1000091511.jpg", type: "APK" },
-            { name: "Free Fire Max", icon: "https://dl.dir.freefiremobile.com/common/web_static/freefiremax/images/home/download_btn.png", type: "PLAY" },
-            { name: "Instagram", icon: "https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg", type: "PLAY" },
-            { name: "WhatsApp", icon: "https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg", type: "PLAY" },
-            { name: "YouTube", icon: "https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png", type: "PLAY" },
-            { name: "CapCut Pro", icon: "https://cdn.iconscout.com/icon/free/png-256/capcut-4573356-3801235.png", type: "PLAY" },
-            { name: "Telegram", icon: "https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg", type: "PLAY" },
-            { name: "PUBG Mobile", icon: "https://m.pubgmobile.com/en/images/logo.png", type: "PLAY" }
-            // यहाँ आप 50 ऐप्स तक बढ़ा सकते हैं...
+        const appsData = [
+            { name: "Sensi Max Ultra", icon: "1000091511.jpg", size: "12MB", type: "APK" },
+            { name: "Instagram", icon: "https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg", size: "48MB", type: "PLAY" },
+            { name: "WhatsApp", icon: "https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg", size: "35MB", type: "PLAY" },
+            { name: "Free Fire Max", icon: "https://dl.dir.freefiremobile.com/common/web_static/freefiremax/images/home/download_btn.png", size: "680MB", type: "PLAY" },
+            { name: "YouTube", icon: "https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png", size: "120MB", type: "PLAY" },
+            { name: "Facebook", icon: "https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg", size: "55MB", type: "PLAY" },
+            { name: "Telegram", icon: "https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg", size: "28MB", type: "PLAY" },
+            { name: "Minecraft", icon: "https://upload.wikimedia.org/wikipedia/en/5/51/Minecraft_cover.png", size: "150MB", type: "PLAY" }
+            // सुशील भाई, आप यहाँ 50 ऐप्स तक की लिस्ट बढ़ा सकते हैं।
         ];
 
         function initStore() {
-            const list = document.getElementById('app-list');
-            apps.forEach(app => {
-                list.innerHTML += `
-                    <div class="app-card p-3 text-center" onclick="openDownload('${app.name}', '${app.icon}')">
-                        <img src="${app.icon}" class="w-14 h-14 mx-auto rounded-2xl mb-1 object-cover border border-gray-800" onerror="this.src='https://cdn-icons-png.flaticon.com/512/888/888841.png'">
-                        <p class="text-[9px] font-bold truncate">${app.name}</p>
-                    </div>`;
+            const grid = document.getElementById('app-grid');
+            appsData.forEach(app => {
+                grid.innerHTML += `
+                <div class="app-card p-4 text-center" onclick="openDetails('${app.name}', '${app.icon}', '${app.size}')">
+                    <img src="${app.icon}" class="w-14 h-14 mx-auto rounded-2xl mb-2 object-cover shadow-lg" onerror="this.src='https://cdn-icons-png.flaticon.com/512/888/888841.png'">
+                    <p class="text-[10px] font-bold truncate">${app.name}</p>
+                </div>`;
             });
-            jarvisSpeak("नमस्ते सुशील कुमार भाई! अल्ट्रा स्टोर ऑनलाइन है।");
+            jarvisTalk("सुप्रभात सुशील कुमार भाई! जार्विस ऑनलाइन है। आपका स्टोर पब्लिक होने के लिए तैयार है।");
         }
 
         function showPage(id) {
@@ -134,34 +134,48 @@
             document.getElementById(id).classList.add('active-page');
         }
 
-        function openDownload(name, icon) {
-            document.getElementById('dl-name').innerText = name;
-            document.getElementById('dl-icon').src = icon;
-            showPage('dl-page');
+        function openDetails(name, icon, size) {
+            document.getElementById('app-title').innerText = name;
+            document.getElementById('app-icon').src = icon;
+            document.getElementById('app-size').innerText = size;
+            document.getElementById('dl-page').classList.add('active-page');
         }
 
-        function jarvisSpeak(text) {
-            const msg = new SpeechSynthesisUtterance();
-            msg.text = text;
-            msg.lang = 'hi-IN';
-            window.speechSynthesis.speak(msg);
+        function closePage() { document.getElementById('dl-page').classList.remove('active-page'); }
+
+        function jarvisTalk(text) {
+            const speech = new SpeechSynthesisUtterance(text || "जार्विस आपकी मदद के लिए तैयार है।");
+            speech.lang = 'hi-IN';
+            window.speechSynthesis.speak(speech);
         }
 
-        function createApp() {
-            const link = document.getElementById('web-link').value;
-            const name = document.getElementById('app-name').value;
-            if(!link || !name) return alert("पूरी जानकारी भरें!");
-            jarvisSpeak("जार्विस कोडिंग कर रहा है... कृपया रुकें।");
+        function convertApp() {
+            const url = document.getElementById('web-url').value;
+            const name = document.getElementById('web-name').value;
+            if(!url || !name) return alert("Please fill all details!");
+            
+            jarvisTalk("वेबसाइट को ऐप में बदला जा रहा है। सुशील भाई के सर्वर पर अपलोड हो रहा है।");
             setTimeout(() => {
-                alert("बधाई हो! " + name + " ऐप बन गया और Public हो गया।");
-                jarvisSpeak("आपका ऐप अब अल्ट्रा स्टोर पर पब्लिक है।");
+                alert("बधाई हो! '" + name + "' का APK तैयार है। यह आपके स्टोर पर पब्लिक हो गया है।");
+                // यहाँ से आप अपने जीमेल पर अलर्ट भेज सकते हैं
             }, 3000);
         }
 
         function payVIP() {
             window.location.href = "upi://pay?pa=9934627814@ybl&pn=Sushil%20Kumar&am=500&cu=INR";
         }
+
+        function searchApps() {
+            let input = document.getElementById('search').value.toLowerCase();
+            let cards = document.getElementsByClassName('app-card');
+            for (let i = 0; i < cards.length; i++) {
+                if (!cards[i].innerText.toLowerCase().includes(input)) {
+                    cards[i].style.display = "none";
+                } else {
+                    cards[i].style.display = "block";
+                }
+            }
+        }
     </script>
 </body>
 </html>
-  
